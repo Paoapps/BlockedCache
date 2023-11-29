@@ -10,6 +10,6 @@ rootProject.name = "BlockedCache"
 
 includeBuild("convention-plugins")
 
-include(":blockedcache")
+include(":blocked-cache")
 include(":sample:android")
 include(":sample:shared")

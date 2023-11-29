@@ -28,20 +28,23 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
- * A cache which avoids multiple threads to retrieve the same information from a backend when no
+ * A cache mechanism for data, which can be refreshed and expired based on time and network status.
+ *
+ * It avoids multiple threads to retrieve the same information from a backend when no
  * data is available in the cache.
  * The cache is based on Flow which enables data to change if the data within the cache changes.
  * When requesting data old data will be emitted in a Loading object. When new information becomes
  * available the new data will be emitted in an success object.
  *
- * @param refreshTime The time in millis after which the cache should be refreshed.
- * @param expireTime The expire time of the item in millis.
- * @param trigger A trigger to refresh the cache. This can be used to refresh the cache
- * @param dataFlow The data (or no data if it is not present) and additional information the cache needs.
- * @param networkStatusFlow The network status. This is used to determine if the cache should be refreshed.
- * @param nowProvider Provider of now(). Useful for unit testing.
- * @param name Can be used for debugging.
- * @param isDebugEnabled Can be used for debugging.
+ * @param T The type of data to be cached.
+ * @property refreshTime Time in milliseconds after which the cache will consider data stale and try to refresh.
+ * @property expireTime Optional time in milliseconds after which the cached data is considered expired.
+ * @property trigger A flow of events that can trigger a cache refresh.
+ * @property dataFlow A flow of cached data.
+ * @property networkStatusFlow A flow representing the network status. It's determined if fetching of new data failed due to the network being unavailable. In order to take advantage of this feature you must update NetworkStatusMonitor.networkStatus with the current network status.
+ * @property nowProvider A provider for the current time. Useful for testing.
+ * @property name A name identifier for the cache, useful for debugging.
+ * @property isDebugEnabled Flag to enable or disable debug logging.
  */
 
 class BlockedCache<T: Any>(
@@ -93,6 +96,17 @@ class BlockedCache<T: Any>(
         }
     }
 
+    /**
+     * Retrieves data from the cache. It performs a network fetch if the data is considered stale or expired,
+     * or when a force refresh is triggered.
+     *
+     * @param forceRefresh Forces a data refresh irrespective of current cache status.
+     * @param predicate A predicate to determine if the data should be refreshed based on its value and creation time.
+     * @param condition A flow representing additional conditions to control data fetching.
+     * @param fetcher A suspend function to fetch new data.
+     * @param updateData A function to update the cache with new data.
+     * @return A flow of [CacheResult], representing the state and data of the cache.
+     */
     fun getData(
         forceRefresh: Boolean = false,
         predicate: (T, Instant) -> Boolean = { _, _ -> true },
@@ -246,6 +260,12 @@ class BlockedCache<T: Any>(
     private fun isExpired(cacheData: BlockedCacheData<T>): Boolean =
         expireTime != null && (cacheData.creationTime ?: 0L) + expireTime < nowProvider.now()
 
+    /**
+     * Triggers a cache refresh. If forceRefresh is true, the cache will attempt to fetch new data
+     * even if the current data is not stale or expired.
+     *
+     * @param forceRefresh Flag to force a data refresh.
+     */
     fun refresh(forceRefresh: Boolean = true) {
         refreshTriggerState.value = RefreshTrigger(forceRefresh = forceRefresh)
     }

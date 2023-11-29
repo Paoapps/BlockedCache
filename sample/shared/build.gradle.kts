@@ -16,7 +16,7 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "shared"
-            export(project(":blockedcache"))
+            export(project(":blocked-cache"))
 
             // workaround: https://youtrack.jetbrains.com/issue/KT-60230#focus=Comments-27-7921542.0-0
             // will be fixed in Kotlin 1.9.10
@@ -48,7 +48,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
-                implementation(project(":blockedcache"))
+                implementation(project(":blocked-cache"))
 
                 implementation("io.insert-koin:koin-core:$koinVersion")
             }

@@ -62,7 +62,7 @@ publishing {
         pom {
             name.set("FiFi")
             description.set("Kotlin Multiplatform Mobile framework for optimal code sharing between iOS and Android.")
-            url.set("https://github.com/lammertw/blockedcache")
+            url.set("https://github.com/Paoapps/BlockedCache")
 
             licenses {
                 license {
@@ -78,7 +78,7 @@ publishing {
                 }
             }
             scm {
-                url.set("https://github.com/lammertw/blockedcache")
+                url.set("https://github.com/Paoapps/BlockedCache")
             }
         }
     }
