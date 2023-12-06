@@ -55,7 +55,7 @@ class BlockedCache<T: Any>(
     private val networkStatusFlow: Flow<NetworkStatus> = NetworkStatusMonitor.networkStatus,
     private val nowProvider: NowProvider = DatetimeNowProvider(),
     private val name: String = "genericBlockedCache",
-    private val isDebugEnabled: Boolean = false
+    private val isDebugEnabled: Boolean = false,
 ) {
     constructor(
         refreshTime: Duration,
@@ -101,6 +101,7 @@ class BlockedCache<T: Any>(
      * or when a force refresh is triggered.
      *
      * @param forceRefresh Forces a data refresh irrespective of current cache status.
+     * @property forceRefreshDelay Time in milliseconds after which a new force refresh can be performed. Defaults to 5 seconds.
      * @param predicate A predicate to determine if the data should be refreshed based on its value and creation time.
      * @param condition A flow representing additional conditions to control data fetching.
      * @param fetcher A suspend function to fetch new data.
@@ -109,6 +110,7 @@ class BlockedCache<T: Any>(
      */
     fun getData(
         forceRefresh: Boolean = false,
+        forceRefreshDelay: Long? = null,
         predicate: (T, Instant) -> Boolean = { _, _ -> true },
         condition: Flow<Boolean> = flowOf(true),
         fetcher: suspend () -> FetcherResult<T>,
@@ -128,6 +130,7 @@ class BlockedCache<T: Any>(
                         if (result == null || (predicate(result, cacheData.creationTime?.let { Instant.fromEpochMilliseconds(it) } ?: Clock.System.now()) && shouldFetchNewData(
                                 cacheData,
                                 forceRefresh || trigger.forceRefresh,
+                                forceRefreshDelay ?: FORCE_REFRESH_DELAY.toLong()
                             ))
                         ) {
                             emit(CacheResult.Loading(result, 0))
@@ -235,18 +238,20 @@ class BlockedCache<T: Any>(
 
     private fun shouldFetchNewData(
         cacheData: BlockedCacheData<T>,
-        forceRefresh: Boolean
+        forceRefresh: Boolean,
+        forceRefreshDelay: Long
     ): Boolean {
         val now = nowProvider.now()
         return (shouldRefresh(cacheData, refreshTime, now)
-                || shouldforceRefresh(cacheData, forceRefresh, now))
+                || shouldforceRefresh(cacheData, forceRefresh, forceRefreshDelay, now))
     }
 
     private fun shouldforceRefresh(
         cacheData: BlockedCacheData<T>,
         forceRefresh: Boolean,
+        forceRefreshDelay: Long,
         now: Long): Boolean {
-        return forceRefresh && (lastForceRefresh.value + FORCE_REFRESH_DELAY) < now && (cacheData.creationTime ?: 0L) + FORCE_REFRESH_DELAY < now
+        return forceRefresh && (lastForceRefresh.value + forceRefreshDelay) < now && (cacheData.creationTime ?: 0L) + forceRefreshDelay < now
     }
 
     private fun shouldRefresh(

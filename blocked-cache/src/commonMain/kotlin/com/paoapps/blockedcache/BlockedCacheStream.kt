@@ -40,9 +40,10 @@ data class BlockedCacheStream<T: Any>(
      * @return A flow of [CacheResult] representing the state and data of the cache.
      */
     fun stream(fetch: Fetch) = cache.getData(
-        forceRefresh = fetch == Fetch.FORCE,
+        forceRefresh = fetch is Fetch.Force,
+        forceRefreshDelay = (fetch as? Fetch.Force)?.minimumDelay,
         fetcher = fetcher.fetcher,
         updateData = updateData,
-        condition = condition.map { it && fetch != Fetch.NO_FETCH },
+        condition = condition.map { it && fetch != Fetch.NoFetch },
     )
 }

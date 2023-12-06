@@ -6,10 +6,22 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlin.random.Random
 
-enum class Fetch {
-    FORCE,
-    CACHE,
-    NO_FETCH;
+sealed class Fetch {
+    /**
+     * Force fetch from network.
+     * minimumDelay: Minimum delay between fetches in milliseconds. Default is 5 seconds.
+     */
+    data class Force(val minimumDelay: Long = 5000L) : Fetch()
+
+    /**
+     * Fetch from cache if available, otherwise fetch from network.
+     */
+    object Cache : Fetch()
+
+    /**
+     * Fetch from cache if available, otherwise do not fetch.
+     */
+    object NoFetch : Fetch()
 }
 
 sealed class FetchRefreshTrigger {
@@ -35,10 +47,10 @@ fun <R> Flow<FetchRefreshTrigger>.createRefreshableFlow(data: suspend (refresh: 
     }.distinctUntilChanged()
 }
 
-fun <R> Flow<FetchRefreshTrigger>.createRefreshableFetchFlow(data: (refresh: Fetch) -> Flow<R>) = createRefreshableFetchFlow(default = Fetch.CACHE, data = data)
+fun <R> Flow<FetchRefreshTrigger>.createRefreshableFetchFlow(data: (refresh: Fetch) -> Flow<R>) = createRefreshableFetchFlow(default = Fetch.Cache, data = data)
 
 fun <R> Flow<FetchRefreshTrigger>.createRefreshableFetchFlow(default: Fetch, data: (refresh: Fetch) -> Flow<R>): Flow<R> =
-    createRefreshableFlow { data(if (it) Fetch.FORCE else default) }
+    createRefreshableFlow { data(if (it) Fetch.Force() else default) }
 
 fun MutableStateFlow<FetchRefreshTrigger>.refresh() {
     value = FetchRefreshTrigger.Refresh()
