@@ -19,21 +19,21 @@ sealed class FetcherResult<out Network : Any> {
     /**
      * Represents an error outcome of a fetch operation.
      */
-    sealed class Error : FetcherResult<Nothing>() {
+    sealed class Error(open val code: Int? = null) : FetcherResult<Nothing>() {
 
         /**
          * Represents an error with an exception.
          *
          * @property error The throwable exception that caused the error.
          */
-        data class Exception(val error: Throwable) : Error()
+        data class Exception(val error: Throwable, override val code: Int? = null) : Error()
 
         /**
          * Represents an error with a specific message.
          *
          * @property message The error message.
          */
-        data class Message(val message: String) : Error()
+        data class Message(val message: String, override val code: Int? = null) : Error()
     }
 }
 
