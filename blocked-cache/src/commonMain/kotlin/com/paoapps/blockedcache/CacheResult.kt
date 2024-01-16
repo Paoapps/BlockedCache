@@ -124,6 +124,7 @@ sealed class CacheResult<out T> {
                 null,
                 0
             )
+            this is Empty && other is Empty -> Empty
             else -> Success(
                 Pair(
                     this.actualOrStaleData,
