@@ -25,7 +25,7 @@ Include the library in your project's build file:
 
 ```kotlin
 dependencies {
-    implementation("com.paoapps.blockedcache:blocked-cache:0.0.1")
+    implementation("com.paoapps.blockedcache:blocked-cache:0.0.3")
 }
 ```
 
