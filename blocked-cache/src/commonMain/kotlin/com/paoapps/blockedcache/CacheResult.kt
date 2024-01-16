@@ -135,6 +135,36 @@ sealed class CacheResult<out T> {
     }
 
     /**
+     * Combines this cache result with another, creating a pair of their data, while handling null values distinctly.
+     *
+     * This function differs from the 'plus' function in its treatment of null values in stale data.
+     * When combining two 'Error' results, it attempts to pair non-null stale data from both.
+     * For 'Loading' states, it combines the actual or stale data if both are non-null.
+     * Only when both cache results are 'Success' does it pair their data directly.
+     *
+     * @param X The type of data in the other cache result.
+     * @param other Another cache result to be combined with this one.
+     * @return A new [CacheResult] instance holding a pair of data from both cache results, handling nulls as described.
+     */
+    fun <X> plusHandlingNulls(other: CacheResult<X>): CacheResult<Pair<T, X>> {
+        return when {
+            this is Error -> Error(failure = failure.map(), staleData = staleData?.let { first -> other.actualOrStaleData?.let { Pair(first, it) } }, creationTimeStaleData = creationTimeStaleData)
+            other is Error -> Error(failure = other.failure.map(), staleData = other.staleData?.let { second -> actualOrStaleData?.let { Pair(it, second) } }, other.creationTimeStaleData)
+            this is Loading || other is Loading -> Loading(
+                actualOrStaleData?.let { first -> other.actualOrStaleData?.let { Pair(first, it) } },
+                0
+            )
+            this is Success && other is Success -> Success(
+                Pair(
+                    this.data,
+                    other.data
+                )
+            )
+            else -> Empty
+        }
+    }
+
+    /**
      * Represents an error state in a cache operation.
      *
      * @property failure The error that occurred during the cache operation.
