@@ -109,6 +109,6 @@ fun <T: Any> FetcherResult<T>.isEmpty(): Boolean {
  * @return A new instance of [FetcherResult.Error] with the same error details.
  */
 fun FetcherResult.Error.map(): FetcherResult.Error = when(this) {
-    is FetcherResult.Error.Exception -> FetcherResult.Error.Exception(error)
-    is FetcherResult.Error.Message -> FetcherResult.Error.Message(message)
+    is FetcherResult.Error.Exception -> FetcherResult.Error.Exception(error, code)
+    is FetcherResult.Error.Message -> FetcherResult.Error.Message(message, code)
 }
