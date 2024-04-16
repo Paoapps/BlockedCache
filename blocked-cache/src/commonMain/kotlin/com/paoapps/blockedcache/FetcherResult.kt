@@ -21,6 +21,12 @@ sealed class FetcherResult<out Network : Any> {
      */
     sealed class Error(open val code: Int? = null) : FetcherResult<Nothing>() {
 
+        val errorMessage: String?
+            get() = when (this) {
+                is Exception -> error.message
+                is Message -> message
+            }
+
         /**
          * Represents an error with an exception.
          *

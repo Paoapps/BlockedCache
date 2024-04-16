@@ -44,6 +44,11 @@ data class BlockedCacheStream<T: Any>(
         forceRefreshDelay = (fetch as? Fetch.Force)?.minimumDelay,
         fetcher = fetcher.fetcher,
         updateData = updateData,
+        predicate = { _, _ ->
+            if (fetch is Fetch.Cache) {
+                !fetch.ignoreExpiration // never fetch from network if ignoreExpiration is true
+            } else true
+        },
         condition = condition.map { it && fetch != Fetch.NoFetch },
     )
 }
