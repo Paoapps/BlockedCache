@@ -125,7 +125,9 @@ mavenPublishing {
 }
 
 // Configure signing only when publishing to Maven Central
-if (project.hasProperty("signing.keyId") || System.getenv("GPG_KEY_ID") != null) {
+if (project.hasProperty("signingInMemoryKeyId") ||
+    project.hasProperty("signing.keyId") ||
+    System.getenv("GPG_KEY_ID") != null) {
     mavenPublishing {
         signAllPublications()
     }
