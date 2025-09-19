@@ -2,7 +2,7 @@ plugins {
     kotlin("multiplatform") version libs.versions.kotlin
     id("com.android.library") version libs.versions.plugin.android
     kotlin("plugin.serialization") version libs.versions.kotlin
-    id("com.vanniktech.maven.publish") version "0.34.0"
+    alias(libs.plugins.vanniktech.mavenPublish)
 }
 
 group = "com.paoapps.blockedcache"
