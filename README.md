@@ -207,7 +207,38 @@ data class BlockedCacheData<T>(
 )
 ```
 
-## 🔧 Configuration
+## �️ Sample App
+
+This repository includes a comprehensive sample app that demonstrates BlockedCache usage on Android. The shared KMM module generates iOS frameworks that can be integrated into iOS projects.
+
+### Running the Sample
+
+1. **Android**: Open the `sample/android` module in Android Studio and run the app
+2. **iOS**: The shared module generates iOS frameworks. To use BlockedCache in an iOS app:
+   - Build the shared module: `./gradlew :sample:shared:assemble`
+   - Import the generated framework (`build/xcode-frameworks/`) into your Xcode project
+   - Use the BlockedCache API in your Swift/Objective-C code
+
+The sample app showcases:
+- Basic caching with automatic refresh
+- Network-aware caching with offline support
+- Custom refresh triggers
+- Error handling and retry logic
+- Multiplatform data sharing between Android and iOS
+
+### Sample Structure
+
+```
+sample/
+├── android/          # Android application
+│   ├── src/main/kotlin/com/paoapps/blockedcache/sample/android/
+│   └── build.gradle.kts
+├── shared/           # Shared Kotlin Multiplatform code
+│   ├── src/commonMain/kotlin/com/paoapps/blockedcache/sample/
+│   └── build.gradle.kts
+```
+
+## �🔧 Configuration
 
 ### Custom Data Storage
 

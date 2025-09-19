@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "BlockedCache"
 include(":library")
+include(":sample:shared")
+include(":sample:android")
