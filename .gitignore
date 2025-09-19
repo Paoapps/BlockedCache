@@ -13,6 +13,7 @@
 .cxx
 local.properties
 *.patch
+.kotlin
 
 # iOS
 ## User settings
