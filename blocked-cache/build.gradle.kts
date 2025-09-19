@@ -6,11 +6,10 @@ plugins {
 }
 
 group = "com.paoapps.blockedcache"
-version = "0.0.7"
+version = "0.0.7-SNAPSHOT"
 
 kotlin {
     androidTarget {
-        publishLibraryVariants("debug", "release")
         compilations.all {
             compilerOptions.configure {
                 jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
@@ -27,7 +26,7 @@ kotlin {
             baseName = "shared"
         }
     }
-    
+
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -86,4 +85,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     namespace = "com.paoapps.blockedcache"
+
+    // Configure variant publishing to avoid ambiguity
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }

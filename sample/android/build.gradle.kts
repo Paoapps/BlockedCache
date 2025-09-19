@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("plugin.compose") version "2.1.21"
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.android.gms.oss-licenses-plugin")
 }
@@ -106,4 +107,7 @@ dependencies {
 
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
+
+    // BlockedCache library
+    implementation(project(":blocked-cache"))
 }

@@ -45,7 +45,7 @@ publishing {
     repositories {
         maven {
             name = "sonatype"
-            setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            setUrl("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
             credentials {
                 username = getExtraString("ossrhUsername")
                 password = getExtraString("ossrhPassword")
@@ -86,5 +86,13 @@ publishing {
 
 // Signing artifacts. Signing.* extra properties values will be used
 signing {
-    sign(publishing.publications)
+    val signingKeyId = getExtraString("signing.keyId")
+    val signingPassword = getExtraString("signing.password")
+
+    if (signingKeyId != null && signingPassword != null && signingPassword.isNotEmpty()) {
+        useGpgCmd()
+        sign(publishing.publications)
+    } else {
+        println("GPG signing skipped - missing or empty keyId or password")
+    }
 }
