@@ -7,7 +7,13 @@ plugins {
 val koinVersion = "3.4.3"
 
 kotlin {
-    android()
+    androidTarget {
+        compilations.all {
+            compilerOptions.configure {
+                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+            }
+        }
+    }
 
     listOf(
         iosX64(),
@@ -35,22 +41,22 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-                implementation("io.ktor:ktor-client-logging:$ktorVersion")
+                api("io.ktor:ktor-client-core:$ktorVersion")
+                api("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                api("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                api("io.ktor:ktor-client-logging:$ktorVersion")
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion") {
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion") {
                     version {
                         strictly(coroutinesVersion)
                     }
                 }
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-core:$serializationVersion")
+                api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
-                implementation(project(":blocked-cache"))
+                api(project(":blocked-cache"))
 
-                implementation("io.insert-koin:koin-core:$koinVersion")
+                api("io.insert-koin:koin-core:$koinVersion")
             }
 
             kotlin.srcDirs(project.projectDir.resolve("build/src/commonMain/kotlin"))
@@ -107,7 +113,7 @@ kotlin {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 26

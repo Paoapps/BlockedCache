@@ -6,16 +6,15 @@ plugins {
 }
 
 group = "com.paoapps.blockedcache"
-version = "0.0.5"
+version = "0.0.7"
 
 kotlin {
-    android {
+    androidTarget {
         publishLibraryVariants("debug", "release")
-    }
-
-    jvm {
         compilations.all {
-            kotlinOptions.jvmTarget = "1.8"
+            compilerOptions.configure {
+                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+            }
         }
     }
 
@@ -77,7 +76,7 @@ kotlin {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 26
@@ -86,4 +85,5 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    namespace = "com.paoapps.blockedcache"
 }

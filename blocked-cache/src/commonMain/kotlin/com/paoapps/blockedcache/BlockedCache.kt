@@ -2,6 +2,7 @@ package com.paoapps.blockedcache
 
 import co.touchlab.kermit.CommonWriter
 import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Logger.Companion.setLogWriters
 import com.paoapps.blockedcache.utils.DatetimeNowProvider
 import com.paoapps.blockedcache.utils.NowProvider
 import com.paoapps.blockedcache.utils.network.NetworkStatus
@@ -85,9 +86,8 @@ class BlockedCache<T: Any>(
     private val mutex = Mutex()
     private val lastForceRefresh: MutableStateFlow<Long> = MutableStateFlow(0)
 
-    private val logger = Logger.apply {
+    private val logger = Logger.withTag("BlockedCache($name)").apply {
         setLogWriters(listOf(CommonWriter()))
-        setTag("BlockedCache($name)")
     }
 
     private fun debugCache(message: String) {
