@@ -13,7 +13,7 @@ kotlin {
         compilations.all {
             compileTaskProvider.configure {
                 compilerOptions {
-                    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+                    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
                 }
             }
         }
@@ -86,10 +86,19 @@ android {
         minSdk = 26
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     namespace = "com.paoapps.blockedcache"
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+        }
+        getByName("debug") {
+            isMinifyEnabled = false
+        }
+    }
 }
 
 mavenPublishing {

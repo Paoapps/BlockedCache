@@ -1,6 +1,6 @@
 [versions]
 
-plugin-android = "8.7.3"
+plugin-android = "8.9.0"
 plugin-kotlin = "2.1.21"
 plugin-gver = "0.42.0"
 plugin-maven-publish = "0.34.0"

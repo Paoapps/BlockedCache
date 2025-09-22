@@ -11,7 +11,7 @@ kotlin {
         compilations.all {
             compileTaskProvider.configure {
                 compilerOptions {
-                    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+                    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
                 }
             }
         }
@@ -71,16 +71,8 @@ kotlin {
             }
         }
         val androidMain by getting {
-
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
-
-                // FIXME: test dependencies should not be here
-                implementation("androidx.test.espresso:espresso-core:3.4.0")
-                implementation("androidx.test:runner:1.4.0")
-                implementation("androidx.test:rules:1.4.0")
-                implementation("androidx.test.ext:junit-ktx:1.1.4")
-                implementation("androidx.test.espresso:espresso-contrib:3.5.1")
             }
 
             kotlin.srcDirs(project.projectDir.resolve("build/src/androidMain/kotlin"))
@@ -126,7 +118,7 @@ android {
     namespace = "com.paoapps.blockedcache.sample.shared"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }

@@ -23,20 +23,19 @@ android {
     namespace = "com.paoapps.blockedcache.sample.android"
 
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        jvmToolchain(17)
     }
 
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
 }
 
@@ -46,10 +45,12 @@ val serializationVersion = "1.5.1"
 
 dependencies {
     implementation(project(":sample:shared"))
-    implementation("androidx.test.ext:junit-ktx:1.1.5")
-    androidTestImplementation("junit:junit:4.12")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+    androidTestImplementation("androidx.test.ext:junit-ktx:1.1.5")
+    androidTestImplementation("junit:junit:4.12")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation("androidx.test:runner:1.4.0")
+    androidTestImplementation("androidx.test:rules:1.4.0")
 
     implementation ("androidx.core:core-ktx:1.10.1")
     implementation ("androidx.appcompat:appcompat:1.6.1")
@@ -66,6 +67,9 @@ dependencies {
     implementation("com.google.android.play:review:2.0.1")
     implementation("com.google.android.play:review-ktx:2.0.1")
 
+    // OSS Licenses
+    implementation("com.google.android.gms:play-services-oss-licenses:17.0.1")
+
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1") {
         version {
             strictly("1.6.4")
@@ -76,9 +80,6 @@ dependencies {
     implementation ("io.coil-kt:coil:2.4.0")
     implementation ("io.coil-kt:coil-svg:2.4.0")
 
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.test:runner:1.4.0")
-    androidTestImplementation("androidx.test:rules:1.4.0")
 
     // TODO: everything below is new in rewrite, remove anything above that we don't need anymore
 

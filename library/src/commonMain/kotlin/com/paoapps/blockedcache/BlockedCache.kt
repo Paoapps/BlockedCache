@@ -25,8 +25,6 @@ import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlin.jvm.JvmName
-import kotlin.native.HiddenFromObjC
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -50,8 +48,6 @@ import kotlin.time.Duration.Companion.milliseconds
  * @property name A name identifier for the cache, useful for debugging.
  * @property isDebugEnabled Flag to enable or disable debug logging.
  */
-
-@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class, kotlin.experimental.ExperimentalObjCRefinement::class)
 class BlockedCache<T: Any>(
     private val refreshTime: Long,
     private val expireTime: Long? = null,
@@ -112,7 +108,7 @@ class BlockedCache<T: Any>(
      * @param updateData A function to update the cache with new data.
      * @return A flow of [CacheResult], representing the state and data of the cache.
      */
-    @HiddenFromObjC
+    @OptIn(kotlin.experimental.ExperimentalObjCRefinement::class)
     fun getData(
         forceRefresh: Boolean = false,
         forceRefreshDelay: Long? = null,
@@ -276,7 +272,7 @@ class BlockedCache<T: Any>(
      *
      * @param forceRefresh Flag to force a data refresh.
      */
-    @HiddenFromObjC
+    @OptIn(kotlin.experimental.ExperimentalObjCRefinement::class)
     fun refresh(forceRefresh: Boolean = true) {
         refreshTriggerState.value = RefreshTrigger(forceRefresh = forceRefresh)
     }
