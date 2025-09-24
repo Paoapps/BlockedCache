@@ -1,7 +1,9 @@
+@file:OptIn(ExperimentalTime::class)
+
 package com.paoapps.blockedcache.utils
 
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 interface NowProvider {
     fun now(): Long

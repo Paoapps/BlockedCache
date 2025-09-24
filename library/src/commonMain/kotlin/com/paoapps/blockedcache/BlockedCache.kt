@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class, ExperimentalTime::class)
+
 package com.paoapps.blockedcache
 
 import co.touchlab.kermit.CommonWriter
@@ -10,24 +12,14 @@ import com.paoapps.blockedcache.utils.network.NetworkStatusMonitor
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.flow.transformLatest
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.ExperimentalTime
 
 /**
  * A cache mechanism for data, which can be refreshed and expired based on time and network status.
@@ -108,7 +100,6 @@ class BlockedCache<T: Any>(
      * @param updateData A function to update the cache with new data.
      * @return A flow of [CacheResult], representing the state and data of the cache.
      */
-    @OptIn(kotlin.experimental.ExperimentalObjCRefinement::class)
     fun getData(
         forceRefresh: Boolean = false,
         forceRefreshDelay: Long? = null,
@@ -272,7 +263,6 @@ class BlockedCache<T: Any>(
      *
      * @param forceRefresh Flag to force a data refresh.
      */
-    @OptIn(kotlin.experimental.ExperimentalObjCRefinement::class)
     fun refresh(forceRefresh: Boolean = true) {
         refreshTriggerState.value = RefreshTrigger(forceRefresh = forceRefresh)
     }

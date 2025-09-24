@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalTime::class)
+
 package com.paoapps.blockedcache.utils
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 class DatetimeNowProvider : NowProvider {
 

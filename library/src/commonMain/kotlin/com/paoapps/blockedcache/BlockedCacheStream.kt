@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalTime::class)
+
 package com.paoapps.blockedcache
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlin.time.ExperimentalTime
 
 /**
  * Manages the streaming of data from a [BlockedCache], providing an interface to fetch and update the cache.
